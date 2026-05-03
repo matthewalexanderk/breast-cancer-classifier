@@ -225,7 +225,7 @@ def run_level(level: Level) -> bool:
         try:
             compiled = compile(tree, "<player_code>", "exec")
             exec(compiled, env, env)
-        except Exception as exc:  # noqa: BLE001
+        except (RuntimeError, ValueError, TypeError, NameError, KeyError, IndexError, AttributeError, ZeroDivisionError) as exc:
             print(f"Runtime error: {exc}")
             continue
         if world.at_goal():
@@ -294,7 +294,7 @@ LEVELS = [
         ],
         docs=[
             "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
-            "https://docs.python.org/3/tutorial/controlflow.html#while-statements",
+            "https://docs.python.org/3/tutorial/controlflow.html#the-while-statement",
         ],
         board=[
             "########",
