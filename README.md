@@ -26,3 +26,11 @@ models were both shown to be good predictors for tumour type.
 
 - `breast_cancer_prediction_classifier_model.ipynb`: EDA, preprocessing,
   model training, and evaluation.
+
+## Python Learning Game
+
+- `python_learning_game.py`: a gamified, level-based Python learning quest.
+- Run it in VS Code (or any terminal) with:
+  - `python python_learning_game.py`
+- When prompted, type your Python code and finish with a line containing `END`.
+  Type `QUIT` to exit.
