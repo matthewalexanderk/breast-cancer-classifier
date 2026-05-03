@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import ast
+import signal
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Callable, Iterable
 
@@ -47,6 +49,29 @@ class Level:
     board: Iterable[str]
     requirements: Iterable[Requirement]
     max_moves: int = 50
+    timeout_seconds: int = 3
+
+
+class ExecutionTimeout(RuntimeError):
+    pass
+
+
+@contextmanager
+def execution_timeout(seconds: int) -> Iterable[None]:
+    if seconds <= 0 or not hasattr(signal, "SIGALRM"):
+        yield
+        return
+
+    def handle_timeout(_signum: int, _frame: object) -> None:
+        raise ExecutionTimeout("Execution time limit exceeded.")
+
+    previous_handler = signal.signal(signal.SIGALRM, handle_timeout)
+    signal.alarm(seconds)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, previous_handler)
 
 
 class GridWorld:
@@ -224,8 +249,22 @@ def run_level(level: Level) -> bool:
         env = build_environment(world)
         try:
             compiled = compile(tree, "<player_code>", "exec")
-            exec(compiled, env, env)
-        except (RuntimeError, ValueError, TypeError, NameError, KeyError, IndexError, AttributeError, ZeroDivisionError) as exc:
+            with execution_timeout(level.timeout_seconds):
+                exec(compiled, env, env)
+        except ExecutionTimeout as exc:
+            print(exc)
+            continue
+        except (
+            RuntimeError,
+            ValueError,
+            TypeError,
+            NameError,
+            KeyError,
+            IndexError,
+            AttributeError,
+            ZeroDivisionError,
+            RecursionError,
+        ) as exc:
             print(f"Runtime error: {exc}")
             continue
         if world.at_goal():
