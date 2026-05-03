@@ -34,3 +34,5 @@ models were both shown to be good predictors for tumour type.
   - `python python_learning_game.py`
 - When prompted, type your Python code and finish with a line containing `END`.
   Type `QUIT` to exit.
+- Safety note: run only code you trust; the game uses a best-effort sandbox.
+- On platforms without `SIGALRM` (such as Windows), execution timeouts are disabled.

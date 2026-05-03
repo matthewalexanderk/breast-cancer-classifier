@@ -6,7 +6,7 @@ import ast
 import signal
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Iterator
 
 
 SAFE_BUILTINS = {
@@ -57,7 +57,7 @@ class ExecutionTimeout(RuntimeError):
 
 
 @contextmanager
-def execution_timeout(seconds: int) -> Iterable[None]:
+def execution_timeout(seconds: int) -> Iterator[None]:
     if seconds <= 0 or not hasattr(signal, "SIGALRM"):
         yield
         return
@@ -478,6 +478,9 @@ def main() -> None:
     print("You will write Python code to move the @ symbol to the G.")
     print("Each level focuses on a new Python concept with official docs.")
     print("Need to stop? Type QUIT when prompted for code.")
+    print("Safety note: run only code you trust; this sandbox is best-effort.")
+    if not hasattr(signal, "SIGALRM"):
+        print("Note: execution timeouts are disabled on this platform.")
     for level in LEVELS:
         completed = run_level(level)
         if not completed:
