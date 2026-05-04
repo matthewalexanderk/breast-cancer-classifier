@@ -170,7 +170,7 @@ def requires_nodes(
     return Requirement(name=name, message=message, check=check)
 
 
-def requires_class_with_init_and_method(message: str, name: str) -> Requirement:
+def requires_class_structure(message: str, name: str) -> Requirement:
     def check(tree: ast.AST) -> bool:
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -512,7 +512,7 @@ LEVELS = [
             "#########",
         ],
         requirements=[
-            requires_class_with_init_and_method(
+            requires_class_structure(
                 "Define a class with __init__ and at least one other method.",
                 "class_with_methods",
             ),
@@ -565,7 +565,10 @@ def main() -> None:
     print("Need to stop? Type QUIT when prompted for code.")
     print("Safety note: run only code you trust; this sandbox is best-effort.")
     if not hasattr(signal, "SIGALRM"):
-        print("Note: execution timeouts are disabled on this platform.")
+        print(
+            "Note: execution timeouts are disabled on platforms without SIGALRM "
+            "support (such as Windows)."
+        )
     for level in LEVELS:
         completed = run_level(level)
         if not completed:
