@@ -21,18 +21,3 @@ In this dataset, tumour size (mean radius in millimetres) is
 positively associated with malignancy, with larger tumours more likely
 to be classified as malignant. Logistic Regression and Random Forest
 models were both shown to be good predictors for tumour type.
-
-## File
-
-- `breast_cancer_prediction_classifier_model.ipynb`: EDA, preprocessing,
-  model training, and evaluation.
-
-## Python Learning Game
-
-- `python_learning_game.py`: a gamified, level-based Python learning quest.
-- Run it in VS Code (or any terminal) with:
-  - `python python_learning_game.py`
-- When prompted, type your Python code and finish with a line containing `END`.
-  Type `QUIT` to exit.
-- Safety note: run only code you trust; the game uses a best-effort sandbox.
-- On platforms without `SIGALRM` (such as Windows), execution timeouts are disabled.
