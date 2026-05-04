@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #f5f1e6;
+  color: #2c3a2f;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+}
+
+header p {
+  margin: 0 0 16px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.canvas-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+#game {
+  margin: 0 auto 12px;
+  width: fit-content;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.editor-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+textarea {
+  min-height: 220px;
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cfd6c7;
+  background: #f9fbf4;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #4f7bd9;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button#reset {
+  background: #6a7c6f;
+}
+
+pre {
+  background: #0f1f14;
+  color: #d8f3dc;
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 120px;
+  white-space: pre-wrap;
+}
+
+.docs ul {
+  padding-left: 18px;
+}
+
+.docs a {
+  color: #2b6cb0;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
