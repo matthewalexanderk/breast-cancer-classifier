@@ -170,6 +170,54 @@ def requires_nodes(
     return Requirement(name=name, message=message, check=check)
 
 
+def requires_class_with_init_and_method(message: str, name: str) -> Requirement:
+    def check(tree: ast.AST) -> bool:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef):
+                has_init = any(
+                    isinstance(child, ast.FunctionDef) and child.name == "__init__"
+                    for child in node.body
+                )
+                has_method = any(
+                    isinstance(child, ast.FunctionDef) and child.name != "__init__"
+                    for child in node.body
+                )
+                if has_init and has_method:
+                    return True
+        return False
+
+    return Requirement(name=name, message=message, check=check)
+
+
+def requires_self_attribute_usage(message: str, name: str) -> Requirement:
+    def check(tree: ast.AST) -> bool:
+        return any(
+            isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "self"
+            for node in ast.walk(tree)
+        )
+
+    return Requirement(name=name, message=message, check=check)
+
+
+def requires_class_instantiation(message: str, name: str) -> Requirement:
+    def check(tree: ast.AST) -> bool:
+        class_names = {
+            node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)
+        }
+        if not class_names:
+            return False
+        return any(
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id in class_names
+            for node in ast.walk(tree)
+        )
+
+    return Requirement(name=name, message=message, check=check)
+
+
 def validate_tree(tree: ast.AST) -> str | None:
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom)):
@@ -444,7 +492,44 @@ LEVELS = [
     ),
     Level(
         key="8",
-        title="Level 8: Generators (advanced)",
+        title="Level 8: OOP Workshop (build your own)",
+        description=[
+            "Design your own helper class with __init__ and a method that moves.",
+            "Store a route or plan on self, then have a method walk the route.",
+            "Instantiate your class and call its method to reach the goal.",
+        ],
+        docs=[
+            "https://docs.python.org/3/tutorial/classes.html#class-objects",
+            "https://docs.python.org/3/tutorial/classes.html#class-and-instance-variables",
+            "https://docs.python.org/3/tutorial/classes.html#method-objects",
+        ],
+        board=[
+            "#########",
+            "#S..#...#",
+            "#.#.#.#.#",
+            "#.#...#G#",
+            "#...#...#",
+            "#########",
+        ],
+        requirements=[
+            requires_class_with_init_and_method(
+                "Define a class with __init__ and at least one other method.",
+                "class_with_methods",
+            ),
+            requires_self_attribute_usage(
+                "Use self.attribute to store or read instance data.",
+                "self_attribute",
+            ),
+            requires_class_instantiation(
+                "Instantiate your class (call the class name).",
+                "class_instantiation",
+            ),
+        ],
+        max_moves=80,
+    ),
+    Level(
+        key="9",
+        title="Level 9: Generators (advanced)",
         description=[
             "Create a generator function that yields directions.",
             "Loop over the generator and move with each yielded value.",
